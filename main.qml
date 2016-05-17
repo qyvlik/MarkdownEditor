@@ -4,13 +4,19 @@ import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.1
 import QtQuick.Dialogs 1.2
 
-import "./markdonwconverter.js" as Converter
+// import "./markdonwconverter.js" as Converter
+
+import org.gdpurjyfs.markdown 1.0
 
 Window {
     visible: true
     width: 1280
     height: 600
     title: qsTr("MarkDownEdit")
+
+    HoedownMarkdownConverter {
+        id: converter
+    }
 
     ColumnLayout {
         anchors.fill: parent
@@ -56,6 +62,14 @@ Window {
                         aobut.open();
                     }
                 }
+
+                Button {
+                    text: qsTr("get rich text")
+                    onClicked: {
+                        console.log(review.text)
+                    }
+                }
+
             }
         }
 
@@ -73,14 +87,26 @@ Window {
                 font.pixelSize: 20
                 wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
                 onTextChanged: {
-                    review.text = Converter.markdown2html(editor.text)
+                    //review.text = Converter.markdown2html(editor.text)
+                    if(editor.text != "") {
+                        //review.textFormat = Text.PlainText;
+                        review.text =
+                                // css +
+                                converter.markdown2html(editor.text);
+//                        lazyer.lazyDo(100, function(){
+//                            review.textFormat = Text.RichText;
+////                            lazyer.lazyDo(5000, function(){
+////                                review.textFormat = Text.PlainText;
+////                            });
+//                        });
+                    }
                 }
             }
             TextArea {
                 id: review
                 Layout.fillHeight: true
                 width: parent.width * 0.5
-                selectByMouse: true
+                // selectByMouse: true
                 // font.pixelSize: 20
                 textFormat: TextEdit.RichText
                 wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
@@ -88,6 +114,21 @@ Window {
                     Qt.openUrlExternally(link);
                 }
             }
+        }
+    }
+
+    Timer {
+        id: lazyer
+        property var __callable
+        interval: 100
+        repeat: false
+        onTriggered: {
+            __callable();
+        }
+        function lazyDo(time, callable) {
+            interval = time;
+            __callable = callable;
+            start();
         }
     }
 
@@ -131,5 +172,4 @@ Window {
         id: aobut
         text: "使用Markdown.Converter.js作为 `html2markdow` 的函数核心"
     }
-
 }
