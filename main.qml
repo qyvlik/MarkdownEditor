@@ -104,6 +104,7 @@ Window {
             }
             TextArea {
                 id: review
+                baseUrl: "."
                 Layout.fillHeight: true
                 width: parent.width * 0.5
                 // selectByMouse: true
