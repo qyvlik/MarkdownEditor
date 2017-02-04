@@ -1,0 +1,5 @@
+module org.gdpurjyfs.markdown
+plugin QtHoedown
+
+# HoedownMarkdownConverter
+# HoedownMarkdownConverter::markdown2html
